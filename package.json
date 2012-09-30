@@ -1,0 +1,26 @@
+{
+  "name": "jsmin-sourcemap",
+  "version": "0.0.0",
+  "description": "JSMin with sourcemaps!",
+  "main": "lib/jsmin.sourcemap.js",
+  "scripts": {
+    "test": "node tests/jsmin.sourcemap.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/twolfson/node-jsmin-sourcemap.git"
+  },
+  "keywords": [
+    "jsmin",
+    "sourcemap",
+    "minification",
+    "min",
+    "minify"
+  ],
+  "author": "Todd Wolfson <todd@twolfson.com>",
+  "license": "The Software shall be used for Good, not Evil. (see LICENSE)",
+  "dependencies": {
+    "jsmin2": "~1.1.1",
+    "source-map": "~0.1.2"
+  }
+}
