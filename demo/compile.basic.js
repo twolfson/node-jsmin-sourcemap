@@ -4,7 +4,7 @@ var fs = require('fs'),
     basic = fs.readFileSync(__dirname + '/basic/basic.js', 'utf8');
 
 // Run the source map and extract its parts
-var sourcemapObj = jsmin(basic),
+var sourcemapObj = jsmin({'input':{'code':basic,'src':'basic.js'},'dest':'basic.min.js'}),
     code = sourcemapObj.code,
     srcMap = sourcemapObj.sourcemap;
 

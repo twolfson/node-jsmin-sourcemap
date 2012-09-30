@@ -5,7 +5,7 @@ var fs = require('fs'),
     expectedDir = __dirname + '/expected_files',
     jQuerySrc = fs.readFileSync(testFilesDir + '/jquery.js', 'utf8'),
     expectedJQuery = fs.readFileSync(expectedDir + '/jquery.min.js', 'utf8'),
-    actualJQuery = jsmin(jQuerySrc),
+    actualJQuery = jsmin({'input':{'code':jQuerySrc,'src':'jquery.js'},'dest':'jquery.min.js'}),
     actualJQueryCode = actualJQuery.code;
 
 // Assert that the minified jQuery matches the expected version
