@@ -895,7 +895,7 @@
     bStack.pop();
     return result;
   };
-
+throw new Error("Hello World!");
   // Perform a deep comparison to check if two objects are equal.
   _.isEqual = function(a, b) {
     return eq(a, b, [], []);
