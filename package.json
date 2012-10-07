@@ -21,6 +21,7 @@
   "license": "The Software shall be used for Good, not Evil. (see LICENSE)",
   "dependencies": {
     "jsmin2": "~1.1.1",
-    "source-map": "~0.1.2"
+    "source-map": "~0.1.2",
+    "char-props": "~0.1.0"
   }
 }
