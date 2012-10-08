@@ -38,10 +38,10 @@ var jsmin = require('node-jsmin-sourcemap'),
 // Process the jquery source via jsmin
 var jqueryMinObj = jsmin({'code':jQuerySrc,'src':'jquery.js','dest':'jquery.min.js'});
 
-// Minified code is availabe at
+// Minified code is available at
 // jqueryMinObj.code;
 
-// Sourcemap is availabe at
+// Sourcemap is available at
 // jqueryMinObj.sourcemap;
 ```
 
