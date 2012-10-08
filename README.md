@@ -3,7 +3,7 @@
 JSMin with sourcemaps!
 
 ## Getting Started
-Install the module with: `npm install node-jsmin-sourcemap`
+Install the module with: `npm install jsmin-sourcemap`
 
 ## Documentation
 JSMin is a standalone function which takes the following format of paramters
