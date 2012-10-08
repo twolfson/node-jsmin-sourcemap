@@ -41,7 +41,7 @@ for (; i < len; i++) {
     'line': expectedPosition.line - 1,
     'column': expectedPosition.column - 1
   });
-  // console.log(actualChar, expectedChar);
+  console.log(actualChar, expectedChar);
 }
 
 // Grab underscore
