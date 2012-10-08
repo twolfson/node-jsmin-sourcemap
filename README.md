@@ -5,6 +5,13 @@ JSMin with sourcemaps!
 ## Getting Started
 Install the module with: `npm install jsmin-sourcemap`
 
+## Demos
+The folders in `demo` are hosted on Plunker for your testing and enjoyment.
+
+- Basic [http://embed.plnkr.co/mGHUpe](http://embed.plnkr.co/mGHUpe)
+- jQuery [http://embed.plnkr.co/JyNn5e](http://embed.plnkr.co/JyNn5e)
+- Multi [http://embed.plnkr.co/FPkQx6](http://embed.plnkr.co/FPkQx6)
+
 ## Documentation
 JSMin is a standalone function which takes the following format of paramters
 ```js
