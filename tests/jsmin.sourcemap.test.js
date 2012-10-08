@@ -29,19 +29,35 @@ var i = 0,
     actualChar,
     actualPosition,
     expectedPosition,
+    expectedLine,
+    expectedCol,
     expectedChar;
 for (; i < len; i++) {
   actualChar = actualJQueryCode.charAt(i);
+  var firstLine = actualProps.lineAt(i) === 0;
   actualPosition = {
     'line': actualProps.lineAt(i) + 1,
-    'column': actualProps.columnAt(i) + 1
+    'column': actualProps.columnAt(i)
   };
   expectedPosition = actualJQueryConsumer.originalPositionFor(actualPosition);
+  expectedLine = firstLine ? expectedPosition.line : expectedPosition.line - 1;
+  expectedCol = expectedPosition.column;
   expectedChar = srcProps.charAt({
-    'line': expectedPosition.line - 1,
-    'column': expectedPosition.column - 1
+    'line': expectedLine,
+    'column': expectedCol
   });
-  console.log(actualChar, expectedChar);
+  var expectedIndex = srcProps.indexAt({
+    'line': expectedLine,
+    'column': expectedCol
+  });
+
+  // // Debug characters
+  // console.log(actualChar, actualPosition.line, actualPosition.column, expectedLine, expectedCol, expectedChar);
+  // console.log(actualChar.charCodeAt(0), expectedChar.charCodeAt(0), expectedIndex);
+
+  // TODO: Finish this -- very close but off-by-one's are annoying >_<
+  // // Assert that the actual and expected characters are equal
+  // assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
 }
 
 // Grab underscore
