@@ -14,7 +14,7 @@ assert.strictEqual(expectedJQuery, actualJQueryCode, 'Minified jQuery does not m
 // Output to combination file (debug only)
 // fs.writeFileSync('debug.min.js', actualJQueryCode, 'utf8');
 
-// TODO: Add reversal test for sourcemap -- do all the characters line up?
+// Reversal test for sourcemap -- do all the characters line up?
 var sourcemap = require('source-map'),
     charProps = require('char-props'),
     SourceMapConsumer = sourcemap.SourceMapConsumer,
@@ -23,9 +23,9 @@ var sourcemap = require('source-map'),
     actualProps = charProps(actualJQueryCode);
     srcProps = charProps(jQuerySrc);
 
-// Iterate over each of the character (first 100 for starters)
-var i = 0,
-    len = 100 || actualJQueryCode.length,
+// Iterate over each of the characters
+var i = 1,
+    len = actualJQueryCode.length,
     actualChar,
     actualPosition,
     expectedPosition,
@@ -51,13 +51,8 @@ for (; i < len; i++) {
     'column': expectedCol
   });
 
-  // // Debug characters
-  // console.log(actualChar, actualPosition.line, actualPosition.column, expectedLine, expectedCol, expectedChar);
-  // console.log(actualChar.charCodeAt(0), expectedChar.charCodeAt(0), expectedIndex);
-
-  // TODO: Finish this -- very close but off-by-one's are annoying >_<
-  // // Assert that the actual and expected characters are equal
-  // assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
+  // Assert that the actual and expected characters are equal
+  assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
 }
 
 // Grab underscore
