@@ -24,7 +24,7 @@ var sourcemap = require('source-map'),
     srcProps = charProps(jQuerySrc);
 
 // Iterate over each of the characters
-var i = 1,
+var i = 0,
     len = actualJQueryCode.length,
     actualChar,
     actualPosition,
@@ -34,13 +34,12 @@ var i = 1,
     expectedChar;
 for (; i < len; i++) {
   actualChar = actualJQueryCode.charAt(i);
-  var firstLine = actualProps.lineAt(i) === 0;
   actualPosition = {
     'line': actualProps.lineAt(i) + 1,
     'column': actualProps.columnAt(i)
   };
   expectedPosition = actualJQueryConsumer.originalPositionFor(actualPosition);
-  expectedLine = firstLine ? expectedPosition.line : expectedPosition.line - 1;
+  expectedLine = expectedPosition.line - 1;
   expectedCol = expectedPosition.column;
   expectedChar = srcProps.charAt({
     'line': expectedLine,
