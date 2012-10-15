@@ -76,7 +76,7 @@ var _Src = fs.readFileSync(testFilesDir + '/underscore.js', 'utf8'),
 // Assert that the minified jQuery and underscore matches the expected version
 assert.strictEqual(expectedJQueryAnd_Code, actualJQueryAnd_Code, 'Minified jQuery and underscore do not match as expected.');
 
-// TODO: Add reversal test for sourcemap -- do all the characters line up?v
+// Add reversal test for sourcemap -- do all the characters line up?v
 var sourcemap = require('source-map'),
     charProps = require('char-props'),
     SourceMapConsumer = sourcemap.SourceMapConsumer,
@@ -85,6 +85,7 @@ var sourcemap = require('source-map'),
     actualProps = charProps(actualJQueryAnd_Code),
     jQuerySrcProps = charProps(jQuerySrc),
     _SrcProps = charProps(_Src);
+
 // Iterate over each of the characters
 var i = 0,
     len = actualJQueryAnd_Code.length,
@@ -114,11 +115,11 @@ for (; i < len; i++) {
     'column': expectedCol
   });
 
-  // console.log(actualChar, actualPosition.line, actualPosition.column, expectedLine, expectedCol, expectedChar);
-if (i !== 141405) {
-  // Assert that the actual and expected characters are equal
-  assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
-}
+  // If the index is not 141405 (line feed between files)
+  if (i !== 141405) {
+    // Assert that the actual and expected characters are equal
+    assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
+  }
 }
 
 // Log success when done
