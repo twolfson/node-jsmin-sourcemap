@@ -2,6 +2,8 @@
 
 JSMin with sourcemaps!
 
+Also available as a [grunt plugin](https://github.com/twolfson/grunt-jsmin-sourcemap)!
+
 ## Getting Started
 Install the module with: `npm install jsmin-sourcemap`
 
