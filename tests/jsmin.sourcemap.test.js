@@ -56,6 +56,7 @@ for (; i < len; i++) {
 
 // Grab underscore
 var _Src = fs.readFileSync(testFilesDir + '/underscore.js', 'utf8'),
+    JQueryAnd_Src = jQuerySrc + '\n' + _Src,
     minParams = {
       'input': [{
         'code': jQuerySrc,
@@ -76,7 +77,44 @@ var _Src = fs.readFileSync(testFilesDir + '/underscore.js', 'utf8'),
 // Assert that the minified jQuery and underscore matches the expected version
 assert.strictEqual(expectedJQueryAnd_Code, actualJQueryAnd_Code, 'Minified jQuery and underscore do not match as expected.');
 
-// TODO: Add reversal test for sourcemap -- do all the characters line up?
+// TODO: Add reversal test for sourcemap -- do all the characters line up?v
+var sourcemap = require('source-map'),
+    charProps = require('char-props'),
+    SourceMapConsumer = sourcemap.SourceMapConsumer,
+    actualJQueryAnd_SourceMap = actualJQueryAnd_.sourcemap,
+    actualJQueryAnd_Consumer = new SourceMapConsumer(actualJQueryAnd_SourceMap),
+    actualProps = charProps(actualJQueryAnd_Code);
+    srcProps = charProps(JQueryAnd_Src);
+// Iterate over each of the characters
+var i = 0,
+    len = actualJQueryAnd_Code.length,
+    actualChar,
+    actualPosition,
+    expectedPosition,
+    expectedLine,
+    expectedCol,
+    expectedChar;
+for (; i < len; i++) {
+  actualChar = actualJQueryAnd_Code.charAt(i);
+  actualPosition = {
+    'line': actualProps.lineAt(i) + 1,
+    'column': actualProps.columnAt(i)
+  };
+  expectedPosition = actualJQueryAnd_Consumer.originalPositionFor(actualPosition);
+  expectedLine = expectedPosition.line - 1;
+  expectedCol = expectedPosition.column;
+  expectedChar = srcProps.charAt({
+    'line': expectedLine,
+    'column': expectedCol
+  });
+  var expectedIndex = srcProps.indexAt({
+    'line': expectedLine,
+    'column': expectedCol
+  });
+
+  // Assert that the actual and expected characters are equal
+  assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
+}
 
 // Log success when done
 console.log('Success!');
