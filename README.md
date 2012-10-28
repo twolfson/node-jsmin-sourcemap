@@ -21,6 +21,7 @@ JSMin is a standalone function which takes the following format of paramters
  * JSMin + source-map
  * @param {Object} params Parameters to minify and generate sourcemap with
  * @param {String} [params.dest="undefined.js"] Destination for your JavaScript (used inside of sourcemap map)
+ * @param {String} [params.srcRoot] Optional root for all relative URLs
  *
  * SINGLE FILE FORMAT
  * @param {String} params.src  File path to original JavaScript (seen when an error is thrown)

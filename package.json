@@ -1,6 +1,6 @@
 {
   "name": "jsmin-sourcemap",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "description": "JSMin with sourcemaps!",
   "main": "lib/jsmin.sourcemap.js",
   "scripts": {
