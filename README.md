@@ -4,6 +4,13 @@ JSMin with sourcemaps!
 
 Also available as a [grunt plugin](https://github.com/twolfson/grunt-jsmin-sourcemap)!
 
+## Synopsis
+[JSMin](http://www.crockford.com/javascript/jsmin.html) is a JavaScript minifier that removes whitespace and comments.
+
+[Source maps](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/) enables developers to view and interact with minified JavaScript as if it were unminified (providing useful line errors and easier debugging).
+
+When you combine both of these, you get a node module that is your new best debugging friend.
+
 ## Getting Started
 Install the module with: `npm install jsmin-sourcemap`
 
