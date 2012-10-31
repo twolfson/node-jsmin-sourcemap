@@ -122,5 +122,87 @@ for (; i < len; i++) {
   }
 }
 
+// Multi test
+var fs = require('fs'),
+    assert = require('assert'),
+    jsmin = require('../lib/jsmin.sourcemap.js'),
+    testFilesDir = __dirname + '/test_files',
+    expectedDir = __dirname + '/expected_files',
+    oneSrc = fs.readFileSync(testFilesDir + '/1.js', 'utf8'),
+    twoSrc = fs.readFileSync(testFilesDir + '/2.js', 'utf8'),
+    threeSrc = fs.readFileSync(testFilesDir + '/3.js', 'utf8'),
+    minParams = {
+      'input': [{
+        'code': oneSrc,
+        'src': '1.js'
+      }, {
+        'code': twoSrc,
+        'src': '2.js'
+      }, {
+        'code': threeSrc,
+        'src': '3.js'
+      }],
+      'dest': 'multi.min.js'
+    },
+    expectedMultiCode = fs.readFileSync(expectedDir + '/multi.js', 'utf8'),
+    actualMulti = jsmin(minParams),
+    actualMultiCode = actualMulti.code;
+
+// // Output to combination file (debug only)
+// fs.writeFileSync('debug.min.js', actualMultiCode, 'utf8');
+
+// Assert that the minified multi.three matches the expected version
+assert.strictEqual(expectedMultiCode, actualMultiCode, 'Minified multi code does not match as expected.');
+
+// Add reversal test for sourcemap -- do all the characters line up?v
+var sourcemap = require('source-map'),
+    charProps = require('char-props'),
+    SourceMapConsumer = sourcemap.SourceMapConsumer,
+    multiSourceMap = actualMulti.sourcemap,
+    multiConsumer = new SourceMapConsumer(multiSourceMap),
+    actualProps = charProps(actualMultiCode),
+    srcPropsMap = {
+      '1.js': charProps(oneSrc),
+      '2.js': charProps(twoSrc),
+      '3.js': charProps(threeSrc)
+    };
+
+// Iterate over each of the characters
+var i = 1,
+    len = actualMultiCode.length,
+    actualChar,
+    actualPosition,
+    srcProps,
+    expectedPosition,
+    expectedLine,
+    expectedCol,
+    expectedChar;
+for (; i < len; i++) {
+  actualChar = actualMultiCode.charAt(i);
+  actualPosition = {
+    'line': actualProps.lineAt(i) + 1,
+    'column': actualProps.columnAt(i)
+  };
+  expectedPosition = multiConsumer.originalPositionFor(actualPosition);
+  expectedLine = expectedPosition.line - 1;
+  expectedCol = expectedPosition.column;
+  srcProps = srcPropsMap[expectedPosition.source];
+
+  expectedChar = srcProps.charAt({
+    'line': expectedLine,
+    'column': expectedCol
+  });
+  var expectedIndex = srcProps.indexAt({
+    'line': expectedLine,
+    'column': expectedCol
+  });
+
+  // // If the index is not the line feed between files
+  if (i !== 52 && i !== 70) {
+    // Assert that the actual and expected characters are equal
+    assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
+  }
+}
+
 // Log success when done
 console.log('Success!');
