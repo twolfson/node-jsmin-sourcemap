@@ -166,7 +166,7 @@ var sourcemap = require('source-map'),
       '2.js': charProps(twoSrc),
       '3.js': charProps(threeSrc)
     };
-// console.log(actualMultiCode);
+
 // Iterate over each of the characters
 var i = 1,
     len = actualMultiCode.length,
@@ -197,14 +197,10 @@ for (; i < len; i++) {
     'column': expectedCol
   });
 
-  // // If the index is not 141405 (line feed between files)
-  if (i !== 52 && i !== 53 && i !== 71 && i !== 72) {
-if (actualChar !== expectedChar) {
-  // console.log(i, actualChar, expectedChar, 'A:', actualPosition.line, actualPosition.column, 'E:', expectedPosition.line, expectedPosition.column);
-  console.log(i, actualChar, expectedChar, 'A:', actualPosition.line, actualPosition.column, 'E:', expectedPosition.source, expectedPosition.line, expectedPosition.column);
-}
+  // // If the index is not the line feed between files
+  if (i !== 52 && i !== 70) {
     // Assert that the actual and expected characters are equal
-    // assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
+    assert.strictEqual(actualChar, expectedChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + expectedLine + ', column ' + expectedCol + '.');
   }
 }
 
