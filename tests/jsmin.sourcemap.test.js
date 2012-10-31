@@ -149,7 +149,7 @@ var fs = require('fs'),
     actualMultiCode = actualMulti.code;
 
 // Output to combination file (debug only)
-// fs.writeFileSync('debug.min.js', actualJQueryAnd_Code, 'utf8');
+fs.writeFileSync('debug.min.js', actualMultiCode, 'utf8');
 
 // // Assert that the minified jQuery and underscore matches the expected version
 // assert.strictEqual(expectedJQueryAnd_Code, actualJQueryAnd_Code, 'Minified jQuery and underscore do not match as expected.');
@@ -166,7 +166,7 @@ var sourcemap = require('source-map'),
       '2.js': charProps(twoSrc),
       '3.js': charProps(threeSrc)
     };
-console.log(actualMultiCode);
+// console.log(actualMultiCode);
 // Iterate over each of the characters
 var i = 1,
     len = actualMultiCode.length,
