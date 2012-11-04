@@ -52,23 +52,25 @@ module.exports = {
         src = filePaths.src,
         dest = filePaths.dest;
 
-    // Read in the src file
-    var singleSrc = fs.readFileSync(testFilesDir + '/' + src, 'utf8'),
-        actualSingle = jsmin({'code': singleSrc, 'src': src, 'dest': dest}),
-        expectedSingleCode = fs.readFileSync(expectedDir + '/' + dest, 'utf8');
-
-    // TODO: Use this to for common ground of single and multi
-    // var srcFileMap = {};
-    // srcFileMap[src] = singleSrc;
-    // info.code = {
-    //   'src': srcFileMap,
+    // Read in the src files
+    var srcFiles = src.map(function (filepath) {
+      var fileSrc = fs.readFileSync(testFilesDir + '/' + filepath, 'utf8'),
+          retObj = {
+            'code': fileSrc,
+            'src': filepath
+          };
+      return retObj;
+    });
+console.log(srcFiles);
+    var actualMulti = jsmin({'input': srcFiles, 'dest': dest}),
+        expectedMultiCode = fs.readFileSync(expectedDir + '/' + dest, 'utf8');
 
     // Save to the code namespace
     info.code = {
-      'src': singleSrc,
-      'actual': actualSingle.code,
-      'actualMap': actualSingle.sourcemap,
-      'expected': expectedSingleCode
+      'input': srcFiles,
+      'actual': actualMulti.code,
+      'actualMap': actualMulti.sourcemap,
+      'expected': expectedMultiCode
     };
 
     // Return info
@@ -79,63 +81,66 @@ module.exports = {
         paths = info.paths,
         srcPaths = JSON.stringify(paths.src);
     assert.strictEqual(code.actual, code.expected, 'Minified ' + srcPaths + ' does not match ' + paths.dest);
-  },
-  "mapped against its source": function (info) {
-    // Localize code items
-    var code = info.code,
-        src = code.src,
-        actual = code.actual,
-        actualMap = code.actualMap;
+  // },
+  // "mapped against its source": function (info) {
+  //   // Localize code items
+  //   var code = info.code,
+  //       input = code.input,
+  //       actual = code.actual,
+  //       actualMap = code.actualMap;
 
-    // Generate a consumer and charProps lookups
-    info.props = {
-      'consumer': new SourceMapConsumer(actualMap),
-      'actualProps': charProps(actual),
-      'srcProps': charProps(src)
-    };
+  //   // Iterate over the input
+  //   console.log
 
-    // Return the info
-    return info;
-  },
-  "matches at all positions": function (info) {
-    // Localize test items
-    var srcCode = info.code.src,
-        actualCode = info.code.actual,
-        props = info.props,
-        consumer = props.consumer,
-        actualProps = props.actualProps,
-        srcProps = props.srcProps;
+  //   // Generate a consumer and charProps lookups
+  //   info.props = {
+  //     'consumer': new SourceMapConsumer(actualMap),
+  //     'actualProps': charProps(actual),
+  //     'srcProps': charProps(src)
+  //   };
 
-    // Iterate over each of the characters
-    var i = 0,
-        len = actualCode.length,
-        actualChar,
-        actualPosition,
-        srcPosition,
-        srcLine,
-        srcCol,
-        srcChar;
-    for (; i < len; i++) {
-      actualChar = actualCode.charAt(i);
-      actualPosition = {
-        'line': actualProps.lineAt(i) + 1,
-        'column': actualProps.columnAt(i)
-      };
-      srcPosition = consumer.originalPositionFor(actualPosition);
-      srcLine = srcPosition.line - 1;
-      srcCol = srcPosition.column;
-      srcChar = srcProps.charAt({
-        'line': srcLine,
-        'column': srcCol
-      });
-      var expectedIndex = srcProps.indexAt({
-        'line': srcLine,
-        'column': srcCol
-      });
+  //   // Return the info
+  //   return info;
+  // },
+  // "matches at all positions": function (info) {
+  //   // Localize test items
+  //   var srcCode = info.code.src,
+  //       actualCode = info.code.actual,
+  //       props = info.props,
+  //       consumer = props.consumer,
+  //       actualProps = props.actualProps,
+  //       srcProps = props.srcProps;
 
-      // Assert that the actual and expected characters are equal
-      assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
-    }
+  //   // Iterate over each of the characters
+  //   var i = 0,
+  //       len = actualCode.length,
+  //       actualChar,
+  //       actualPosition,
+  //       srcPosition,
+  //       srcLine,
+  //       srcCol,
+  //       srcChar;
+  //   for (; i < len; i++) {
+  //     actualChar = actualCode.charAt(i);
+  //     actualPosition = {
+  //       'line': actualProps.lineAt(i) + 1,
+  //       'column': actualProps.columnAt(i)
+  //     };
+  //     srcPosition = consumer.originalPositionFor(actualPosition);
+  //     srcLine = srcPosition.line - 1;
+  //     srcCol = srcPosition.column;
+  //     srcChar = srcProps.charAt({
+  //       'line': srcLine,
+  //       'column': srcCol
+  //     });
+  //     var expectedIndex = srcProps.indexAt({
+  //       'line': srcLine,
+  //       'column': srcCol
+  //     });
+
+  //     // Assert that the actual and expected characters are equal
+  //     assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
+  //   }
   }
 };
 
