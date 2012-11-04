@@ -16,7 +16,7 @@ module.exports = {
     return {'paths': {'src': 'jquery.js', 'dest': 'jquery.min.js'}};
   },
   "Multiple files": function jQueryPaths () {
-    return {'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.min.js'}};
+    return {'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.js'}};
   },
   "minified and sourcemapped (single)": function (info) {
     // Localize the src and dest
@@ -61,7 +61,7 @@ module.exports = {
           };
       return retObj;
     });
-console.log(srcFiles);
+
     var actualMulti = jsmin({'input': srcFiles, 'dest': dest}),
         expectedMultiCode = fs.readFileSync(expectedDir + '/' + dest, 'utf8');
 
