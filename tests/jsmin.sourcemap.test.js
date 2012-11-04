@@ -1,29 +1,62 @@
 var vows = require('vows'),
+    traverse = require('traverse'),
     commands = require('./jsmin.sourcemap.commands.js');
 
-var suite = vows.describe('jsmin-sourcemap');
+// TODO: Move from function to OOP
+function addCommands(batch) {
+  // Traverse over the batch
+  traverse(batch).forEach(function traverseBatch (node) {
+    var key = this.key;
 
-suite.addBatch({
-  'test': {
-    'test2': function () {
-      return 2;
+    // If there is a key
+    if (key) {
+      // Look up the command for it
+      var command = commands[key];
+
+      // If there is a command
+      if (command) {
+        // If the node is an object
+        if (typeof node === 'object') {
+          // Add it as a topic
+          node.topic = node.topic || command;
+        } else {
+          // Otherwise, save it over the node itself
+          node = command;
+        }
+      }
+    }
+
+    // Return the node
+    return node;
+  });
+
+  // Return the batch
+  return batch;
+}
+
+// Set up the vows suite
+var suite = vows.describe('jsmin-sourcemap');
+// suite.addBatch({
+//   'test': {
+//     'test2': function () {
+//       return 2;
+//     }
+//   }
+// });
+
+
+// [{
+var batch = addCommands({
+  "jQuery": {
+    "minified and sourcemapped (single)": {
+      "matches its C-minified counterpart": true
+      // // "is debuggable": true,
+      // "mapped against its source": {
+      //   "matches at all positions": true
+      // }
     }
   }
 });
-
-// Export the batch as a suite
-suite['export'](module);
-
-// module.exports = [{
-//   "jQuery": {
-//     "minified and sourcemapped": {
-//       "matches its C-minified counterpart": true
-//       // // "is debuggable": true,
-//       // "mapped against its source": {
-//       //   "matches at all positions": true
-//       // }
-//     }
-//   }
 // // }, {
 // //   "jQuery and Underscore": {
 // //     "minified and sourcemapped": {
@@ -46,3 +79,8 @@ suite['export'](module);
 // //   }
 // }];
 // // TODO: Multi-nested
+console.log(batch);
+suite.addBatch(batch);
+
+// Export the batch as a suite
+suite['export'](module);

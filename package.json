@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "grunt": "~0.3.12",
-    "vows": "~0.6.4"
+    "vows": "~0.6.4",
+    "traverse": "~0.6.3"
   }
 }
