@@ -15,7 +15,38 @@ module.exports = {
   "jQuery": function jQueryPaths () {
     return {'paths': {'src': 'jquery.js', 'dest': 'jquery.min.js'}};
   },
+  "Multiple files": function jQueryPaths () {
+    return {'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.min.js'}};
+  },
   "minified and sourcemapped (single)": function (info) {
+    // Localize the src and dest
+    var filePaths = info.paths,
+        src = filePaths.src,
+        dest = filePaths.dest;
+
+    // Read in the src file
+    var singleSrc = fs.readFileSync(testFilesDir + '/' + src, 'utf8'),
+        actualSingle = jsmin({'code': singleSrc, 'src': src, 'dest': dest}),
+        expectedSingleCode = fs.readFileSync(expectedDir + '/' + dest, 'utf8');
+
+    // TODO: Use this to for common ground of single and multi
+    // var srcFileMap = {};
+    // srcFileMap[src] = singleSrc;
+    // info.code = {
+    //   'src': srcFileMap,
+
+    // Save to the code namespace
+    info.code = {
+      'src': singleSrc,
+      'actual': actualSingle.code,
+      'actualMap': actualSingle.sourcemap,
+      'expected': expectedSingleCode
+    };
+
+    // Return info
+    return info;
+  },
+  "minified and sourcemapped (multi)": function (info) {
     // Localize the src and dest
     var filePaths = info.paths,
         src = filePaths.src,
@@ -105,7 +136,6 @@ module.exports = {
       // Assert that the actual and expected characters are equal
       assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
     }
-console.log('all done', i, len);
   }
 };
 

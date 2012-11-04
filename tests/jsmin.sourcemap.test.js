@@ -37,10 +37,35 @@ function addCommands(batch) {
 // Set up the vows suite
 var suite = vows.describe('jsmin-sourcemap');
 
-// [{
+// var batch = addCommands({
+//   "jQuery": {
+//     "minified and sourcemapped (single)": {
+//       "matches its C-minified counterpart": true,
+//       // "is debuggable": true,
+//       "mapped against its source": {
+//         "matches at all positions": true
+//       }
+//     }
+//   }
+// });
+// suite.addBatch(batch);
+
+// var batch = addCommands({
+//   "jQuery and Underscore": {
+//     "minified and sourcemapped": {
+//       "matches its C-minified counterpart": true,
+//       // "is debuggable": true,
+//       "mapped against its source": {
+//         "matches at all positions": true
+//       }
+//     }
+//   }
+// });
+// suite.addBatch(batch);
+
 var batch = addCommands({
-  "jQuery": {
-    "minified and sourcemapped (single)": {
+  "Multiple files": {
+    "minified and sourcemapped (multi)": {
       "matches its C-minified counterpart": true,
       // "is debuggable": true,
       "mapped against its source": {
@@ -49,30 +74,8 @@ var batch = addCommands({
     }
   }
 });
-// // }, {
-// //   "jQuery and Underscore": {
-// //     "minified and sourcemapped": {
-// //       "matches its C-minified counterpart": true,
-// //       // "is debuggable": true,
-// //       "mapped against its source": {
-// //         "matches at all positions": true
-// //       }
-// //     }
-// //   }
-// // }, {
-// //   "Multiple files": {
-// //     "minified and sourcemapped": {
-// //       "matches its C-minified counterpart": true,
-// //       // "is debuggable": true,
-// //       "mapped against its source": {
-// //         "matches at all positions": true
-// //       }
-// //     }
-// //   }
-// }];
-// // TODO: Multi-nested
-
 suite.addBatch(batch);
+// // TODO: Multi-nested
 
 // Export the batch as a suite
 suite['export'](module);
