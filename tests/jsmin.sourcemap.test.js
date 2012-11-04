@@ -46,46 +46,15 @@ function addCommands(batch) {
 }
 
 // Set up the vows suite
-var suite = vows.describe('jsmin-sourcemap');
+var suite = vows.describe('jsmin-sourcemap'),
+    batches = require('./jsmin.sourcemap.tests.json');
 
-var batch = addCommands({
-  "jQuery": {
-    "minified and sourcemapped (single)": {
-      "matches its C-minified counterpart": true,
-      // "is debuggable": true,
-      "mapped against its source": {
-        "matches at all positions": true
-      }
-    }
-  }
+// Generate each batch and add it to the suite
+batches.forEach(function (_batch) {
+  var batch = addCommands(_batch);
+  suite.addBatch(batch);
 });
-suite.addBatch(batch);
 
-var batch = addCommands({
-  "jQuery and Underscore": {
-    "minified and sourcemapped (multi)": {
-      "matches its C-minified counterpart": true,
-      // "is debuggable": true,
-      "mapped against its source": {
-        "matches at all positions": true
-      }
-    }
-  }
-});
-suite.addBatch(batch);
-
-var batch = addCommands({
-  "Multiple files": {
-    "minified and sourcemapped (multi)": {
-      "matches its C-minified counterpart": true,
-      // "is debuggable": true,
-      "mapped against its source": {
-        "matches at all positions": true
-      }
-    }
-  }
-});
-suite.addBatch(batch);
 // TODO: Multi-nested
 
 // Export the batch as a suite
