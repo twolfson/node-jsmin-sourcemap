@@ -79,7 +79,7 @@ var batch = addCommands({
 // //   }
 // }];
 // // TODO: Multi-nested
-console.log(batch);
+
 suite.addBatch(batch);
 
 // Export the batch as a suite
