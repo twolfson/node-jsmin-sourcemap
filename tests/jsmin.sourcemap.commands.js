@@ -36,15 +36,9 @@ module.exports = {
         actualSingle = jsmin({'code': singleSrc, 'src': src, 'dest': dest}),
         expectedSingleCode = fs.readFileSync(expectedDir + '/' + dest, 'utf8');
 
-    // TODO: Use this to for common ground of single and multi
-    // var srcFileMap = {};
-    // srcFileMap[src] = singleSrc;
-    // info.code = {
-    //   'src': srcFileMap,
-
     // Save to the code namespace
     info.code = {
-      'src': singleSrc,
+      'input': [{'src': src, 'code': singleSrc}],
       'actual': actualSingle.code,
       'actualMap': actualSingle.sourcemap,
       'expected': expectedSingleCode
