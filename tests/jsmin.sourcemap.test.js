@@ -18,7 +18,18 @@ function addCommands(batch) {
         // If the node is an object
         if (typeof node === 'object') {
           // Add it as a topic
-          node.topic = node.topic || command;
+          var topic = node.topic || command;
+
+          // DEV: Wrap the topic inside of a try/catch for debugging
+          node.topic = function () {
+            var retVal;
+            try {
+              retVal = topic.apply(this, arguments);
+            } catch (e) {
+              console.error(e);
+            }
+            return retVal;
+          };
         } else {
           // Otherwise, save it over the node itself
           node = command;
