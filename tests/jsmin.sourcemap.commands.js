@@ -126,43 +126,34 @@ module.exports = {
 
     // Iterate over each of the characters
     var i = 0,
-        len = actualCode.length,
-        actualChar,
-        actualPosition,
-        srcFile,
-        srcPosition,
-        srcLine,
-        srcCol,
-        srcChar,
-        srcProps;
+        len = actualCode.length;
     for (; i < len; i++) {
       // Look up the position of our index
-      actualPosition = {
+      var actualPosition = {
         'line': actualProps.lineAt(i) + 1,
         'column': actualProps.columnAt(i)
       };
 
       // Grab the position of the item and its fil
-      srcPosition = consumer.originalPositionFor(actualPosition);
-      srcFile = srcPosition.source;
+      var srcPosition = consumer.originalPositionFor(actualPosition),
+          srcFile = srcPosition.source;
 
       // If we have a source file and we are not at a break spot
       var atBreakSpot = breaks.indexOf(i) > -1;
       if (srcFile && !atBreakSpot) {
         // Grab the srcProps for it
-        srcProps = srcPropMap[srcFile];
+        var srcProps = srcPropMap[srcFile];
 
         // Lookup the character at the src positions
-        srcLine = srcPosition.line - 1;
-        srcCol = srcPosition.column;
-        srcChar = srcProps.charAt({
-          'line': srcLine,
-          'column': srcCol
-        });
+        var srcLine = srcPosition.line - 1,
+            srcCol = srcPosition.column,
+            srcChar = srcProps.charAt({
+              'line': srcLine,
+              'column': srcCol
+            });
 
         // Assert that the actual and expected characters are equal
-        actualChar = actualCode.charAt(i);
-        console.log(i);
+        var actualChar = actualCode.charAt(i);
         assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
       }
     }
@@ -170,4 +161,3 @@ module.exports = {
 };
 
 //   "jQuery and Underscore": {
-//   "Multiple files": {
