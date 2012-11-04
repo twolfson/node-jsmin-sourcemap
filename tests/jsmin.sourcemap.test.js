@@ -2,7 +2,28 @@ var vows = require('vows'),
     traverse = require('traverse'),
     commands = require('./jsmin.sourcemap.commands.js');
 
-// TODO: Move from function to OOP
+// Theoretical setup for TestDriver class
+// var engines = {};
+// function addEngine(name, engine) {
+//   engines[name] = engine;
+// }
+
+// function TestDriver(engineName) {
+//   // Grab and localize the engine
+//   var engine = engines[engineName];
+//   this.engine = engine;
+
+//   // TODO: We might want to create SuiteDriver
+//   this.suite = engine.createSuite();
+//   this.batches = [];
+// }
+// TestDriver.prototype = {
+//   'addBatch': function (inBatch) {
+//     var outBatch = addCommands(inBatch);
+//     this.suite.addBatch(outBatch);
+//   }
+// };
+
 function addCommands(batch) {
   // Traverse over the batch
   traverse(batch).forEach(function traverseBatch (node) {
