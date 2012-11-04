@@ -81,28 +81,34 @@ module.exports = {
         paths = info.paths,
         srcPaths = JSON.stringify(paths.src);
     assert.strictEqual(code.actual, code.expected, 'Minified ' + srcPaths + ' does not match ' + paths.dest);
-  // },
-  // "mapped against its source": function (info) {
-  //   // Localize code items
-  //   var code = info.code,
-  //       input = code.input,
-  //       actual = code.actual,
-  //       actualMap = code.actualMap;
+  },
+  "mapped against its source": function (info) {
+    // Localize code items
+    var code = info.code,
+        input = code.input,
+        actual = code.actual,
+        actualMap = code.actualMap;
 
-  //   // Iterate over the input
-  //   console.log
+    // Iterate over the input
+    var srcProps = {};
+    input.forEach(function (item) {
+      var src = item.src,
+          code = item.code;
+      srcProps[src] = charProps(code);
+    });
 
-  //   // Generate a consumer and charProps lookups
-  //   info.props = {
-  //     'consumer': new SourceMapConsumer(actualMap),
-  //     'actualProps': charProps(actual),
-  //     'srcProps': charProps(src)
-  //   };
+    // Generate a consumer and charProps lookups
+    info.props = {
+      'consumer': new SourceMapConsumer(actualMap),
+      'actualProps': charProps(actual),
+      'srcProps': srcProps
+    };
 
-  //   // Return the info
-  //   return info;
-  // },
-  // "matches at all positions": function (info) {
+    // Return the info
+    return info;
+  },
+  "matches at all positions": function (info) {
+    console.log(info.props.srcProps);
   //   // Localize test items
   //   var srcCode = info.code.src,
   //       actualCode = info.code.actual,
@@ -140,7 +146,7 @@ module.exports = {
 
   //     // Assert that the actual and expected characters are equal
   //     assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
-  //   }
+    // }
   }
 };
 
