@@ -12,12 +12,14 @@ var sourcemap = require('source-map'),
 
 // Define all of the commands that a test will use
 module.exports = {
+  // Set up for jQuery constants
   "jQuery": function jQueryPaths () {
     var info = {
       'paths': {'src': 'jquery.js', 'dest': 'jquery.min.js'}
     };
     return info;
   },
+  // Set up for jQuery and _ constants
   "jQuery and Underscore": function jQueryAnd_Paths () {
     var info = {
       'paths': {'src': ['jquery.js', 'underscore.js'], 'dest': 'jqueryAndUnderscore.min.js'},
@@ -25,6 +27,7 @@ module.exports = {
     };
     return info;
   },
+  // Set up for multiple file constants
   "Multiple files": function multiPaths () {
     var info = {
       'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.js'},
@@ -32,6 +35,7 @@ module.exports = {
     };
     return info;
   },
+  // Generate minified code and source map (for single file)
   "minified and sourcemapped (single)": function (info) {
     // Localize the src and dest
     var filePaths = info.paths,
@@ -54,6 +58,7 @@ module.exports = {
     // Return info
     return info;
   },
+  // Generate minified code and source map (for multiple files)
   "minified and sourcemapped (multi)": function (info) {
     // Localize the src and dest
     var filePaths = info.paths,
@@ -84,12 +89,14 @@ module.exports = {
     // Return info
     return info;
   },
+  // Compare minified code to gcc'd counterpart
   "matches its C-minified counterpart": function (info) {
     var code = info.code,
         paths = info.paths,
         srcPaths = JSON.stringify(paths.src);
     assert.strictEqual(code.actual, code.expected, 'Minified ' + srcPaths + ' does not match ' + paths.dest);
   },
+  // Generate charProps from sourcemap
   "mapped against its source": function (info) {
     // Localize code items
     var code = info.code,
@@ -115,6 +122,7 @@ module.exports = {
     // Return the info
     return info;
   },
+  // Assert that each character reverse maps back to its same character
   "matches at all positions": function (info) {
     // Localize test items
     var srcCode = info.code.src,
