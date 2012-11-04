@@ -35,6 +35,21 @@ module.exports = {
     };
     return info;
   },
+  "Multiple nested files": function () {
+    var info = {
+      'paths': {
+        'src': [
+          'nested.js',
+          'nested/controllers/controller1.js',
+          'nested/controllers/controller2.js',
+          'nested/models/model1.js'
+        ],
+        'dest': 'nested.min.js'
+      },
+      'breaks': [1, 43, 88, 100]
+    };
+    return info;
+  },
   // Generate minified code and source map (for single file)
   "minified and sourcemapped (single)": function (info) {
     // Localize the src and dest
