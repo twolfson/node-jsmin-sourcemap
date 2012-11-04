@@ -61,18 +61,18 @@ var batch = addCommands({
 });
 suite.addBatch(batch);
 
-// var batch = addCommands({
-//   "jQuery and Underscore": {
-//     "minified and sourcemapped": {
-//       "matches its C-minified counterpart": true,
-//       // "is debuggable": true,
-//       "mapped against its source": {
-//         "matches at all positions": true
-//       }
-//     }
-//   }
-// });
-// suite.addBatch(batch);
+var batch = addCommands({
+  "jQuery and Underscore": {
+    "minified and sourcemapped (multi)": {
+      "matches its C-minified counterpart": true,
+      // "is debuggable": true,
+      "mapped against its source": {
+        "matches at all positions": true
+      }
+    }
+  }
+});
+suite.addBatch(batch);
 
 var batch = addCommands({
   "Multiple files": {

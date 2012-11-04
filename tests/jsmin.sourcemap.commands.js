@@ -18,7 +18,14 @@ module.exports = {
     };
     return info;
   },
-  "Multiple files": function jQueryPaths () {
+  "jQuery and Underscore": function jQueryAnd_Paths () {
+    var info = {
+      'paths': {'src': ['jquery.js', 'underscore.js'], 'dest': 'jqueryAndUnderscore.min.js'},
+      'breaks': [141405]
+    };
+    return info;
+  },
+  "Multiple files": function multiPaths () {
     var info = {
       'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.js'},
       'breaks': [52, 70]
@@ -153,5 +160,3 @@ module.exports = {
     }
   }
 };
-
-//   "jQuery and Underscore": {
