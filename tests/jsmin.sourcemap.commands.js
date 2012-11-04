@@ -13,10 +13,17 @@ var sourcemap = require('source-map'),
 // Define all of the commands that a test will use
 module.exports = {
   "jQuery": function jQueryPaths () {
-    return {'paths': {'src': 'jquery.js', 'dest': 'jquery.min.js'}};
+    var info = {
+      'paths': {'src': 'jquery.js', 'dest': 'jquery.min.js'}
+    };
+    return info;
   },
   "Multiple files": function jQueryPaths () {
-    return {'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.js'}};
+    var info = {
+      'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.js'},
+      'breaks': [52, 70]
+    };
+    return info;
   },
   "minified and sourcemapped (single)": function (info) {
     // Localize the src and dest
@@ -90,63 +97,75 @@ module.exports = {
         actualMap = code.actualMap;
 
     // Iterate over the input
-    var srcProps = {};
+    var srcPropMap = {};
     input.forEach(function (item) {
       var src = item.src,
           code = item.code;
-      srcProps[src] = charProps(code);
+      srcPropMap[src] = charProps(code);
     });
 
     // Generate a consumer and charProps lookups
     info.props = {
       'consumer': new SourceMapConsumer(actualMap),
       'actualProps': charProps(actual),
-      'srcProps': srcProps
+      'srcPropMap': srcPropMap
     };
 
     // Return the info
     return info;
   },
   "matches at all positions": function (info) {
-    console.log(info.props.srcProps);
-  //   // Localize test items
-  //   var srcCode = info.code.src,
-  //       actualCode = info.code.actual,
-  //       props = info.props,
-  //       consumer = props.consumer,
-  //       actualProps = props.actualProps,
-  //       srcProps = props.srcProps;
+    // Localize test items
+    var srcCode = info.code.src,
+        actualCode = info.code.actual,
+        props = info.props,
+        consumer = props.consumer,
+        actualProps = props.actualProps,
+        srcPropMap = props.srcPropMap,
+        breaks = info.breaks || [];
 
-  //   // Iterate over each of the characters
-  //   var i = 0,
-  //       len = actualCode.length,
-  //       actualChar,
-  //       actualPosition,
-  //       srcPosition,
-  //       srcLine,
-  //       srcCol,
-  //       srcChar;
-  //   for (; i < len; i++) {
-  //     actualChar = actualCode.charAt(i);
-  //     actualPosition = {
-  //       'line': actualProps.lineAt(i) + 1,
-  //       'column': actualProps.columnAt(i)
-  //     };
-  //     srcPosition = consumer.originalPositionFor(actualPosition);
-  //     srcLine = srcPosition.line - 1;
-  //     srcCol = srcPosition.column;
-  //     srcChar = srcProps.charAt({
-  //       'line': srcLine,
-  //       'column': srcCol
-  //     });
-  //     var expectedIndex = srcProps.indexAt({
-  //       'line': srcLine,
-  //       'column': srcCol
-  //     });
+    // Iterate over each of the characters
+    var i = 0,
+        len = actualCode.length,
+        actualChar,
+        actualPosition,
+        srcFile,
+        srcPosition,
+        srcLine,
+        srcCol,
+        srcChar,
+        srcProps;
+    for (; i < len; i++) {
+      // Look up the position of our index
+      actualPosition = {
+        'line': actualProps.lineAt(i) + 1,
+        'column': actualProps.columnAt(i)
+      };
 
-  //     // Assert that the actual and expected characters are equal
-  //     assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
-    // }
+      // Grab the position of the item and its fil
+      srcPosition = consumer.originalPositionFor(actualPosition);
+      srcFile = srcPosition.source;
+
+      // If we have a source file and we are not at a break spot
+      var atBreakSpot = breaks.indexOf(i) > -1;
+      if (srcFile && !atBreakSpot) {
+        // Grab the srcProps for it
+        srcProps = srcPropMap[srcFile];
+
+        // Lookup the character at the src positions
+        srcLine = srcPosition.line - 1;
+        srcCol = srcPosition.column;
+        srcChar = srcProps.charAt({
+          'line': srcLine,
+          'column': srcCol
+        });
+
+        // Assert that the actual and expected characters are equal
+        actualChar = actualCode.charAt(i);
+        console.log(i);
+        assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
+      }
+    }
   }
 };
 
