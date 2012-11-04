@@ -36,24 +36,16 @@ function addCommands(batch) {
 
 // Set up the vows suite
 var suite = vows.describe('jsmin-sourcemap');
-// suite.addBatch({
-//   'test': {
-//     'test2': function () {
-//       return 2;
-//     }
-//   }
-// });
-
 
 // [{
 var batch = addCommands({
   "jQuery": {
     "minified and sourcemapped (single)": {
-      "matches its C-minified counterpart": true
-      // // "is debuggable": true,
-      // "mapped against its source": {
-      //   "matches at all positions": true
-      // }
+      "matches its C-minified counterpart": true,
+      // "is debuggable": true,
+      "mapped against its source": {
+        "matches at all positions": true
+      }
     }
   }
 });

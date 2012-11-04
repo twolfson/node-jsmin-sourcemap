@@ -1,8 +1,14 @@
+// Basics for testing
 var fs = require('fs'),
     assert = require('assert'),
     jsmin = require('../lib/jsmin.sourcemap.js'),
     testFilesDir = __dirname + '/test_files',
     expectedDir = __dirname + '/expected_files';
+
+// Reverse test items
+var sourcemap = require('source-map'),
+    charProps = require('char-props'),
+    SourceMapConsumer = sourcemap.SourceMapConsumer;
 
 // Define all of the commands that a test will use
 module.exports = {
@@ -34,7 +40,7 @@ module.exports = {
       'expected': expectedSingleCode
     };
 
-    // Return actualSingle
+    // Return info
     return info;
   },
   "matches its C-minified counterpart": function (info) {
@@ -42,18 +48,66 @@ module.exports = {
         paths = info.paths,
         srcPaths = JSON.stringify(paths.src);
     assert.strictEqual(code.actual, code.expected, 'Minified ' + srcPaths + ' does not match ' + paths.dest);
+  },
+  "mapped against its source": function (info) {
+    // Localize code items
+    var code = info.code,
+        src = code.src,
+        actual = code.actual,
+        actualMap = code.actualMap;
+
+    // Generate a consumer and charProps lookups
+    info.props = {
+      'consumer': new SourceMapConsumer(actualMap),
+      'actualProps': charProps(actual),
+      'srcProps': charProps(src)
+    };
+
+    // Return the info
+    return info;
+  },
+  "matches at all positions": function (info) {
+    // Localize test items
+    var srcCode = info.code.src,
+        actualCode = info.code.actual,
+        props = info.props,
+        consumer = props.consumer,
+        actualProps = props.actualProps,
+        srcProps = props.srcProps;
+
+    // Iterate over each of the characters
+    var i = 0,
+        len = actualCode.length,
+        actualChar,
+        actualPosition,
+        srcPosition,
+        srcLine,
+        srcCol,
+        srcChar;
+    for (; i < len; i++) {
+      actualChar = actualCode.charAt(i);
+      actualPosition = {
+        'line': actualProps.lineAt(i) + 1,
+        'column': actualProps.columnAt(i)
+      };
+      srcPosition = consumer.originalPositionFor(actualPosition);
+      srcLine = srcPosition.line - 1;
+      srcCol = srcPosition.column;
+      srcChar = srcProps.charAt({
+        'line': srcLine,
+        'column': srcCol
+      });
+      var expectedIndex = srcProps.indexAt({
+        'line': srcLine,
+        'column': srcCol
+      });
+
+      // Assert that the actual and expected characters are equal
+      assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
+    }
+console.log('all done', i, len);
   }
 };
 
-//   "jQuery": {
-//     "minified and sourcemapped": {
-//       "matches its C-minified counterpart": true,
-//       // "is debuggable": true,
-//       "mapped against its source": {
-//         "matches at all positions": true
-//       }
-//     }
-//   }
-// }, {
 //   "jQuery and Underscore": {
 //   "Multiple files": {
