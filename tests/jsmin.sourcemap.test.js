@@ -68,8 +68,8 @@ function addCommands(batch) {
 
 // Set up the vows suite
 var suite = vows.describe('jsmin-sourcemap'),
-    batches = eval(require('fs').readFileSync(__dirname + '/jsmin.sourcemap.tests.json', 'utf8'));
-    // batches = require('./jsmin.sourcemap.tests.json');
+    // batches = eval(require('fs').readFileSync(__dirname + '/jsmin.sourcemap.tests.json', 'utf8'));
+    batches = require('./jsmin.sourcemap.tests.json');
 
 // Generate each batch and add it to the suite
 batches.forEach(function (_batch) {
