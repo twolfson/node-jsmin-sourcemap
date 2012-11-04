@@ -86,7 +86,7 @@ var batch = addCommands({
   }
 });
 suite.addBatch(batch);
-// // TODO: Multi-nested
+// TODO: Multi-nested
 
 // Export the batch as a suite
 suite['export'](module);
