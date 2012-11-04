@@ -10,7 +10,7 @@
   },
   "main": "lib/jsmin.sourcemap.js",
   "scripts": {
-    "test": "node tests/jsmin.sourcemap.test.js"
+    "test": "vows tests/jsmin.sourcemap.test.js"
   },
   "repository": {
     "type": "git",
@@ -22,8 +22,7 @@
   "keywords": [
     "jsmin",
     "sourcemap",
-    "minification",
-    "min",
+    "source map",
     "minify"
   ],
   "license": "The Software shall be used for Good, not Evil. (see LICENSE)",
@@ -33,7 +32,7 @@
     "char-props": "~0.1.0"
   },
   "devDependencies": {
-    "grunt": "~0.3.12"
-  },
-  "keywords": ["jsmin", "sourcemap", "source map", "minify"]
+    "grunt": "~0.3.12",
+    "vows": "~0.6.4"
+  }
 }
