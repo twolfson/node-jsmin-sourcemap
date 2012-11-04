@@ -20,11 +20,28 @@ module.exports = {
         actualSingle = jsmin({'code':singleSrc, 'src': src, 'dest': dest}),
         expectedSingleCode = fs.readFileSync(testFilesDir + '/' + src, 'utf8');
 
-    // Save to the proper namespaces
+    // TODO: Use this to for common ground of single and multi
+    // var srcFileMap = {};
+    // srcFileMap[src] = singleSrc;
+    // info.code = {
+    //   'src': srcFileMap,
 
+    // Save to the code namespace
+    info.code = {
+      'src': singleSrc,
+      'actual': actualSingle.code,
+      'actualMap': actualSingle.sourcemap,
+      'expected': expectedSingleCode
+    };
 
     // Return actualSingle
-    return actualSingle;
+    return info;
+  },
+  "matches its C-minified counterpart": function (info) {
+    var code = info.code,
+        paths = info.paths,
+        srcPaths = JSON.stringify(paths.src);
+    assert.strictEqual(code.actual, code.expected, 'Minified ' + srcPaths + ' does not match ' + paths.dest);
   }
 };
 
