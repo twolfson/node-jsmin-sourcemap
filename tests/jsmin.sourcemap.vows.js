@@ -108,6 +108,9 @@ module.exports = {
     var actualCode = info.code.actual;
     fs.writeFileSync('debug.min.js', actualCode, 'utf8');
   },
+  "_is debuggable": function (info) {
+    return info;
+  },
   // Compare minified code to gcc'd counterpart
   "matches its C-minified counterpart": function (info) {
     var code = info.code,
