@@ -1,6 +1,6 @@
 {
   "name": "jsmin-sourcemap",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "JSMin with sourcemaps!",
   "homepage": "https://github.com/twolfson/node-jsmin-sourcemap",
   "author": {
@@ -28,12 +28,13 @@
   "license": "The Software shall be used for Good, not Evil. (see LICENSE)",
   "dependencies": {
     "jsmin2": "~1.1.1",
-    "source-map": "~0.1.2",
-    "char-props": "~0.1.0"
+    "source-map-index-generator": "~0.1.1"
   },
   "devDependencies": {
     "grunt": "~0.3.12",
     "vows": "~0.6.4",
-    "traverse": "~0.6.3"
+    "traverse": "~0.6.3",
+    "source-map": "~0.1.8",
+    "char-props": "~0.1.3"
   }
 }
