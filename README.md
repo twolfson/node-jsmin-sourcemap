@@ -1,4 +1,4 @@
-# node-jsmin-sourcemap
+# node-jsmin-sourcemap [![Donate on Gittip](http://badgr.co/gittip/twolfson.png)](https://www.gittip.com/twolfson/)
 
 JSMin with sourcemaps!
 
