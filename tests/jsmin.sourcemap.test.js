@@ -30,7 +30,7 @@ function minifySingle() {
       'input': [{'src': src, 'code': singleSrc}],
       'actual': actualSingle.code,
       'actualMap': actualSingle.sourcemap,
-      'expected': expectedSingleCode
+      // 'expected': expectedSingleCode
     };
   });
 }
@@ -61,7 +61,7 @@ function minifyMulti() {
       'input': srcFiles,
       'actual': actualMulti.code,
       'actualMap': actualMulti.sourcemap,
-      'expected': expectedMultiCode
+      // 'expected': expectedMultiCode
     };
   });
 }
@@ -71,8 +71,12 @@ function assertMatchesC() {
     var info = this.info,
         code = info.code,
         paths = info.paths,
-        srcPaths = JSON.stringify(paths.src);
-    assert.strictEqual(code.actual, code.expected, 'Minified ' + srcPaths + ' does not match ' + paths.dest);
+        expectedCode = fs.readFileSync(expectedDir + '/' + info.paths.dest, 'utf8');
+    assert.strictEqual(
+      code.actual,
+      expectedCode,
+      'Minified ' + JSON.stringify(paths.src) + ' does not match ' + paths.dest
+    );
   });
 }
 
