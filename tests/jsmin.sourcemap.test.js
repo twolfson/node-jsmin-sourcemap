@@ -202,3 +202,29 @@ describe('Multiple nested files', function () {
     });
   });
 });
+
+describe('Multiple files containing "use strict"', function () {
+  before(function () {
+    this.params = {
+      'src': [
+        'strict1.js',
+        'strict2.js'
+      ],
+      'dest': 'strict.min.js'
+    };
+    // this.expectedBreaks = [1, 43, 88, 100];
+  });
+
+  describe('minified and sourcemapped (multi)', function () {
+    minifyMulti();
+    isDebuggable();
+
+    assertMatchesC();
+
+    describe('mapped against its source', function () {
+      mapAgainstSource();
+
+      assertAllPositionsMatch();
+    });
+  });
+});
