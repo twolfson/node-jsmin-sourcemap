@@ -118,7 +118,6 @@ function isDebuggable() {
     before(function () {
       try { fs.mkdirSync(__dirname + '/actual_files'); } catch (e) {}
       fs.writeFileSync(__dirname + '/actual_files/debug.min.js', this.result.code, 'utf8');
-  console.log(this.result);
       fs.writeFileSync(__dirname + '/actual_files/debug.min.map', this.result.sourcemap, 'utf8');
     });
   }
@@ -213,6 +212,7 @@ describe.only('Multiple files containing "use strict"', function () {
       ],
       'dest': 'strict.min.js'
     };
+    this.expectedBreaks = [36];
   });
 
   describe('minified and sourcemapped (multi)', function () {
