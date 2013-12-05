@@ -76,6 +76,80 @@ function assertMatchesC() {
   });
 }
 
+function mapAgainstSource() {
+  before(function () {
+    // Localize code items
+    var info = this.info,
+        code = info.code,
+        input = code.input,
+        actual = code.actual,
+        actualMap = code.actualMap;
+
+    // Iterate over the input
+    var srcPropMap = {};
+    input.forEach(function (item) {
+      var src = item.src,
+          code = item.code;
+      srcPropMap[src] = charProps(code);
+    });
+
+    // Generate a consumer and charProps lookups
+    info.props = {
+      'consumer': new SourceMapConsumer(actualMap),
+      'actualProps': charProps(actual),
+      'srcPropMap': srcPropMap
+    };
+  });
+}
+
+function assertAllPositionsMatch() {
+  it('matches at all positions', function () {
+    // Localize test items
+    var info = this.info,
+        srcCode = info.code.src,
+        actualCode = info.code.actual,
+        props = info.props,
+        consumer = props.consumer,
+        actualProps = props.actualProps,
+        srcPropMap = props.srcPropMap,
+        breaks = info.breaks || [];
+
+    // Iterate over each of the characters
+    var i = 0,
+        len = actualCode.length;
+    for (; i < len; i++) {
+      // Look up the position of our index
+      var actualPosition = {
+        'line': actualProps.lineAt(i) + 1,
+        'column': actualProps.columnAt(i)
+      };
+
+      // Grab the position of the item and its fil
+      var srcPosition = consumer.originalPositionFor(actualPosition),
+          srcFile = srcPosition.source;
+
+      // If we have a source file and we are not at a break spot
+      var atBreakSpot = breaks.indexOf(i) > -1;
+      if (srcFile && !atBreakSpot) {
+        // Grab the srcProps for it
+        var srcProps = srcPropMap[srcFile];
+
+        // Lookup the character at the src positions
+        var srcLine = srcPosition.line - 1,
+            srcCol = srcPosition.column,
+            srcChar = srcProps.charAt({
+              'line': srcLine,
+              'column': srcCol
+            });
+
+        // Assert that the actual and expected characters are equal
+        var actualChar = actualCode.charAt(i);
+        assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
+      }
+    }
+  });
+}
+
 describe('jQuery', function () {
   before(function jQueryPaths () {
     this.info = {
@@ -90,8 +164,9 @@ describe('jQuery', function () {
     it.skip('_is debuggable', function () {
     });
     describe('mapped against its source', function () {
-      it.skip('matches at all positions', function () {
-      });
+      mapAgainstSource();
+
+      assertAllPositionsMatch();
     });
   });
 });
@@ -111,8 +186,9 @@ describe('jQuery and Underscore', function () {
     it.skip('_is debuggable', function () {
     });
     describe('mapped against its source', function () {
-      it.skip('matches at all positions', function () {
-      });
+      mapAgainstSource();
+
+      assertAllPositionsMatch();
     });
   });
 });
@@ -132,8 +208,9 @@ describe('Multiple files', function () {
     it.skip('_is debuggable', function () {
     });
     describe('mapped against its source', function () {
-      it.skip('matches at all positions', function () {
-      });
+      mapAgainstSource();
+
+      assertAllPositionsMatch();
     });
   });
 });
@@ -161,8 +238,9 @@ describe('Multiple nested files', function () {
     it.skip('is debuggable', function () {
     });
     describe('mapped against its source', function () {
-      it.skip('matches at all positions', function () {
-      });
+      mapAgainstSource();
+
+      assertAllPositionsMatch();
     });
   });
 });
