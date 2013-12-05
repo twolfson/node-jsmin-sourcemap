@@ -203,7 +203,7 @@ describe('Multiple nested files', function () {
   });
 });
 
-describe.only('Multiple files containing "use strict"', function () {
+describe('Multiple files containing "use strict"', function () {
   before(function () {
     this.params = {
       'src': [
@@ -219,7 +219,8 @@ describe.only('Multiple files containing "use strict"', function () {
     minifyMulti();
     isDebuggable();
 
-    // assertMatchesC();
+    // DEV: This is not the actual C output. The C one doesn't contain line breaks which can break concatenated scripts.
+    assertMatchesC();
 
     describe('mapped against its source', function () {
       mapAgainstSource();
