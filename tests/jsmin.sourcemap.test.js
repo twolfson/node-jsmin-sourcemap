@@ -80,25 +80,18 @@ function mapAgainstSource() {
   before(function () {
     // Localize code items
     var info = this.info,
-        code = info.code,
-        input = code.input,
-        actual = code.actual,
-        actualMap = code.actualMap;
+        code = info.code;
 
     // Iterate over the input
     var srcPropMap = {};
-    input.forEach(function (item) {
-      var src = item.src,
-          code = item.code;
-      srcPropMap[src] = charProps(code);
+    code.input.forEach(function (item) {
+      srcPropMap[item.src] = charProps(item.code);
     });
 
     // Generate a consumer and charProps lookups
-    info.props = {
-      'consumer': new SourceMapConsumer(actualMap),
-      'actualProps': charProps(actual),
-      'srcPropMap': srcPropMap
-    };
+    this.srcConsumer = new SourceMapConsumer(code.actualMap);
+    this.actualProps = charProps(code.actual);
+    this.srcPropMap = srcPropMap;
   });
 }
 
@@ -106,16 +99,12 @@ function assertAllPositionsMatch() {
   it('matches at all positions', function () {
     // Localize test items
     var info = this.info,
-        srcCode = info.code.src,
-        actualCode = info.code.actual,
-        props = info.props,
-        consumer = props.consumer,
-        actualProps = props.actualProps,
-        srcPropMap = props.srcPropMap,
         breaks = info.breaks || [];
 
     // Iterate over each of the characters
-    var i = 0,
+    var actualCode = info.code.actual,
+        actualProps = this.actualProps,
+        i = 0,
         len = actualCode.length;
     for (; i < len; i++) {
       // Look up the position of our index
@@ -125,14 +114,15 @@ function assertAllPositionsMatch() {
       };
 
       // Grab the position of the item and its fil
-      var srcPosition = consumer.originalPositionFor(actualPosition),
+      var srcPosition = this.srcConsumer.originalPositionFor(actualPosition),
           srcFile = srcPosition.source;
 
       // If we have a source file and we are not at a break spot
+      // TODO: Actually figure out `breaks`
       var atBreakSpot = breaks.indexOf(i) > -1;
       if (srcFile && !atBreakSpot) {
         // Grab the srcProps for it
-        var srcProps = srcPropMap[srcFile];
+        var srcProps = this.srcPropMap[srcFile];
 
         // Lookup the character at the src positions
         var srcLine = srcPosition.line - 1,
