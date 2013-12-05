@@ -169,10 +169,10 @@ describe('jQuery', function () {
 
   describe('minified and sourcemapped (single)', function () {
     minifySingle();
+    isDebuggable();
 
     assertMatchesC();
-    it.skip('_is debuggable', function () {
-    });
+
     describe('mapped against its source', function () {
       mapAgainstSource();
 
@@ -191,10 +191,10 @@ describe('jQuery and Underscore', function () {
 
   describe('minified and sourcemapped (multi)', function () {
     minifyMulti();
+    isDebuggable();
 
     assertMatchesC();
-    it.skip('_is debuggable', function () {
-    });
+
     describe('mapped against its source', function () {
       mapAgainstSource();
 
@@ -213,10 +213,10 @@ describe('Multiple files', function () {
 
   describe('minified and sourcemapped (multi)', function () {
     minifyMulti();
+    isDebuggable();
 
     assertMatchesC();
-    it.skip('_is debuggable', function () {
-    });
+
     describe('mapped against its source', function () {
       mapAgainstSource();
 
@@ -243,10 +243,10 @@ describe('Multiple nested files', function () {
 
   describe('minified and sourcemapped (multi)', function () {
     minifyMulti();
+    isDebuggable();
 
     assertMatchesC();
-    it.skip('is debuggable', function () {
-    });
+
     describe('mapped against its source', function () {
       mapAgainstSource();
 
