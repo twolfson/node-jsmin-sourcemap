@@ -181,28 +181,6 @@ describe('jQuery', function () {
   });
 });
 
-describe('jQuery and Underscore', function () {
-  before(function jQueryAndUnderscorePaths () {
-    this.info = {
-      'paths': {'src': ['jquery.js', 'underscore.js'], 'dest': 'jqueryAndUnderscore.min.js'},
-      'breaks': [141405]
-    };
-  });
-
-  describe('minified and sourcemapped (multi)', function () {
-    minifyMulti();
-    isDebuggable();
-
-    assertMatchesC();
-
-    describe('mapped against its source', function () {
-      mapAgainstSource();
-
-      assertAllPositionsMatch();
-    });
-  });
-});
-
 describe('Multiple files', function () {
   before(function multiPaths () {
     this.info = {
