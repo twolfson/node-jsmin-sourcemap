@@ -123,6 +123,25 @@ function isDebuggable() {
   }
 }
 
+describe('A single file', function () {
+  before(function jQueryPaths () {
+    this.params = {'src': '1.js', 'dest': 'single.js'};
+  });
+
+  describe('minified and sourcemapped (single)', function () {
+    minifySingle();
+    isDebuggable();
+
+    assertMatchesC();
+
+    describe('mapped against its source', function () {
+      mapAgainstSource();
+
+      assertAllPositionsMatch();
+    });
+  });
+});
+
 describe('jQuery', function () {
   before(function jQueryPaths () {
     this.params = {'src': 'jquery.js', 'dest': 'jquery.min.js'};
