@@ -158,6 +158,7 @@ module.exports = {
     // Iterate over each of the characters
     var i = 0,
         len = actualCode.length;
+    console.log('hey');
     for (; i < len; i++) {
       // Look up the position of our index
       var actualPosition = {
@@ -188,5 +189,6 @@ module.exports = {
         assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
       }
     }
+    console.log('there');
   }
 };
