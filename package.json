@@ -1,6 +1,6 @@
 {
   "name": "jsmin-sourcemap",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "JSMin with sourcemaps!",
   "homepage": "https://github.com/twolfson/node-jsmin-sourcemap",
   "author": {
