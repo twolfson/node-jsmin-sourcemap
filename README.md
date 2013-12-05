@@ -89,7 +89,7 @@ var indexMinObj = jsmin({
 ```
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint your code via [grunt](http://gruntjs.com/) and test via `npm test`.
+In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint via [grunt](https://github.com/gruntjs/grunt) and test via `npm test`.
 
 ## Donating
 Support this project and [others by twolfson][gittip] via [gittip][].
@@ -99,7 +99,13 @@ Support this project and [others by twolfson][gittip] via [gittip][].
 [gittip-badge]: https://rawgithub.com/twolfson/gittip-badge/master/dist/gittip.png
 [gittip]: https://www.gittip.com/twolfson/
 
-## License
-Copyright (c) 2012 Todd Wolfson
+## Unlicense
+As of Dec 04 2013, Todd Wolfson has released this repository and its contents to the public domain.
 
-Licensed under the MIT license.
+It has been released under the [UNLICENSE][].
+
+[UNLICENSE]: UNLICENSE
+
+Previous to this, it was licensed under the [MIT license][].
+
+[MIT license]: https://github.com/twolfson/node-jsmin-sourcemap/blob/3c92dddc788658351b87c608c5da770272f178c0/README.md#license

@@ -25,7 +25,12 @@
     "source map",
     "minify"
   ],
-  "license": "The Software shall be used for Good, not Evil. (see LICENSE)",
+  "licenses": [
+    {
+      "type": "UNLICENSE",
+      "url": "https://github.com/twolfson/node-jsmin-sourcemap/blob/master/UNLICENSE"
+    }
+  ],
   "dependencies": {
     "jsmin2": "~1.1.1",
     "source-map-index-generator": "~0.1.1"
