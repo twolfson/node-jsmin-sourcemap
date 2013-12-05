@@ -150,6 +150,16 @@ function assertAllPositionsMatch() {
   });
 }
 
+function isDebuggable() {
+  if (process.env.TEST_DEBUG) {
+    before(function () {
+      var actualCode = this.info.code.actual;
+      try { fs.mkdirSync(__dirname + '/actual_files'); } catch (e) {}
+      fs.writeFileSync(__dirname + '/actual_files/debug.min.js', actualCode, 'utf8');
+    });
+  }
+}
+
 describe('jQuery', function () {
   before(function jQueryPaths () {
     this.info = {
