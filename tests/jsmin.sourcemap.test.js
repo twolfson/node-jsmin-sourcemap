@@ -118,6 +118,7 @@ function isDebuggable() {
     before(function () {
       try { fs.mkdirSync(__dirname + '/actual_files'); } catch (e) {}
       fs.writeFileSync(__dirname + '/actual_files/debug.min.js', this.result.code, 'utf8');
+  console.log(this.result);
       fs.writeFileSync(__dirname + '/actual_files/debug.min.map', this.result.sourcemap, 'utf8');
     });
   }
