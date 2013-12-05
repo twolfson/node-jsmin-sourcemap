@@ -133,12 +133,6 @@ describe('jQuery', function () {
     isDebuggable();
 
     assertMatchesC();
-
-    describe('mapped against its source', function () {
-      mapAgainstSource();
-
-      assertAllPositionsMatch();
-    });
   });
 });
 
