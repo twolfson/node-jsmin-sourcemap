@@ -12,29 +12,22 @@ var sourcemap = require('source-map'),
 
 function minifySingle() {
   before(function () {
-    // DEV: This was written originally on sculptor which wraps vows.
-    // DEV: That should explain the writing and passing of `info`
-    // Localize the src and dest
-    var info = this.info,
-        filePaths = info.paths,
-        src = filePaths.src;
-
     // Read in the src file
-    var singleSrc = fs.readFileSync(testFilesDir + '/' + src, 'utf8');
+    var params = this.params,
+        src = params.src,
+        singleSrc = fs.readFileSync(testFilesDir + '/' + src, 'utf8');
 
     // Save to the code namespace
     this.input = [{'src': src, 'code': singleSrc}];
-    this.result = jsmin({'code': singleSrc, 'src': src, 'dest': filePaths.dest});
+    this.result = jsmin({'code': singleSrc, 'src': src, 'dest': params.dest});
   });
 }
 
 function minifyMulti() {
   before(function () {
-    // Localize the src and dest
-    var info = this.info,
-        filePaths = info.paths,
-        src = filePaths.src,
-        dest = filePaths.dest;
+    // Localize the src
+    var params = this.params,
+        src = params.src;
 
     // Read in the src files
     var srcFiles = src.map(function (filepath) {
@@ -48,19 +41,18 @@ function minifyMulti() {
 
     // Save relevant info
     this.input = srcFiles;
-    this.result = jsmin({'input': srcFiles, 'dest': dest});
+    this.result = jsmin({'input': srcFiles, 'dest': params.dest});
   });
 }
 
 function assertMatchesC() {
   it('matches its C-minified counterpart', function () {
-    var info = this.info,
-        paths = info.paths,
-        expectedCode = fs.readFileSync(expectedDir + '/' + info.paths.dest, 'utf8');
+    var params = this.params,
+        expectedCode = fs.readFileSync(expectedDir + '/' + params.dest, 'utf8');
     assert.strictEqual(
       this.result.code,
       expectedCode,
-      'Minified ' + JSON.stringify(paths.src) + ' does not match ' + paths.dest
+      'Minified ' + JSON.stringify(params.src) + ' does not match ' + params.dest
     );
   });
 }
@@ -83,12 +75,9 @@ function mapAgainstSource() {
 
 function assertAllPositionsMatch() {
   it('matches at all positions', function () {
-    // Localize test items
-    var info = this.info,
-        breaks = info.breaks || [];
-
     // Iterate over each of the characters
-    var result = this.result,
+    var breaks = this.expectedBreaks || [],
+        result = this.result,
         actualCode = result.code,
         actualProps = this.actualProps,
         i = 0,
@@ -139,9 +128,7 @@ function isDebuggable() {
 
 describe('jQuery', function () {
   before(function jQueryPaths () {
-    this.info = {
-      'paths': {'src': 'jquery.js', 'dest': 'jquery.min.js'}
-    };
+    this.params = {'src': 'jquery.js', 'dest': 'jquery.min.js'};
   });
 
   describe('minified and sourcemapped (single)', function () {
@@ -160,10 +147,8 @@ describe('jQuery', function () {
 
 describe('Multiple files', function () {
   before(function multiPaths () {
-    this.info = {
-      'paths': {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.js'},
-      'breaks': [52, 70]
-    };
+    this.params = {'src': ['1.js', '2.js', '3.js'], 'dest': 'multi.js'};
+    this.expectedBreaks = [52, 70];
   });
 
   describe('minified and sourcemapped (multi)', function () {
@@ -182,18 +167,16 @@ describe('Multiple files', function () {
 
 describe('Multiple nested files', function () {
   before(function () {
-    this.info = {
-      'paths': {
-        'src': [
-          'nested.js',
-          'nested/controllers/controller1.js',
-          'nested/controllers/controller2.js',
-          'nested/models/model1.js'
-        ],
-        'dest': 'nested.min.js'
-      },
-      'breaks': [1, 43, 88, 100]
+    this.params = {
+      'src': [
+        'nested.js',
+        'nested/controllers/controller1.js',
+        'nested/controllers/controller2.js',
+        'nested/models/model1.js'
+      ],
+      'dest': 'nested.min.js'
     };
+    this.expectedBreaks = [1, 43, 88, 100];
   });
 
   describe('minified and sourcemapped (multi)', function () {
