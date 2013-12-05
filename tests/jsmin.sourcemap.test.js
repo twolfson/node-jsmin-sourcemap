@@ -17,21 +17,14 @@ function minifySingle() {
     // Localize the src and dest
     var info = this.info,
         filePaths = info.paths,
-        src = filePaths.src,
-        dest = filePaths.dest;
+        src = filePaths.src;
 
     // Read in the src file
-    var singleSrc = fs.readFileSync(testFilesDir + '/' + src, 'utf8'),
-        actualSingle = jsmin({'code': singleSrc, 'src': src, 'dest': dest}),
-        expectedSingleCode = fs.readFileSync(expectedDir + '/' + dest, 'utf8');
+    var singleSrc = fs.readFileSync(testFilesDir + '/' + src, 'utf8');
 
     // Save to the code namespace
-    info.code = {
-      'input': [{'src': src, 'code': singleSrc}],
-      'actual': actualSingle.code,
-      'actualMap': actualSingle.sourcemap,
-      // 'expected': expectedSingleCode
-    };
+    this.input = [{'src': src, 'code': singleSrc}];
+    this.result = jsmin({'code': singleSrc, 'src': src, 'dest': filePaths.dest});
   });
 }
 
@@ -53,27 +46,19 @@ function minifyMulti() {
       return retObj;
     });
 
-    var actualMulti = jsmin({'input': srcFiles, 'dest': dest}),
-        expectedMultiCode = fs.readFileSync(expectedDir + '/' + dest, 'utf8');
-
-    // Save to the code namespace
-    info.code = {
-      'input': srcFiles,
-      'actual': actualMulti.code,
-      'actualMap': actualMulti.sourcemap,
-      // 'expected': expectedMultiCode
-    };
+    // Save relevant info
+    this.input = srcFiles;
+    this.result = jsmin({'input': srcFiles, 'dest': dest});
   });
 }
 
 function assertMatchesC() {
   it('matches its C-minified counterpart', function () {
     var info = this.info,
-        code = info.code,
         paths = info.paths,
         expectedCode = fs.readFileSync(expectedDir + '/' + info.paths.dest, 'utf8');
     assert.strictEqual(
-      code.actual,
+      this.result.code,
       expectedCode,
       'Minified ' + JSON.stringify(paths.src) + ' does not match ' + paths.dest
     );
@@ -82,19 +67,16 @@ function assertMatchesC() {
 
 function mapAgainstSource() {
   before(function () {
-    // Localize code items
-    var info = this.info,
-        code = info.code;
-
     // Iterate over the input
     var srcPropMap = {};
-    code.input.forEach(function (item) {
+    this.input.forEach(function (item) {
       srcPropMap[item.src] = charProps(item.code);
     });
 
     // Generate a consumer and charProps lookups
-    this.srcConsumer = new SourceMapConsumer(code.actualMap);
-    this.actualProps = charProps(code.actual);
+    var result = this.result;
+    this.srcConsumer = new SourceMapConsumer(result.sourcemap);
+    this.actualProps = charProps(result.code);
     this.srcPropMap = srcPropMap;
   });
 }
@@ -106,7 +88,8 @@ function assertAllPositionsMatch() {
         breaks = info.breaks || [];
 
     // Iterate over each of the characters
-    var actualCode = info.code.actual,
+    var result = this.result,
+        actualCode = result.code,
         actualProps = this.actualProps,
         i = 0,
         len = actualCode.length;
@@ -147,7 +130,7 @@ function assertAllPositionsMatch() {
 function isDebuggable() {
   if (process.env.TEST_DEBUG) {
     before(function () {
-      var actualCode = this.info.code.actual;
+      var actualCode = this.result.code;
       try { fs.mkdirSync(__dirname + '/actual_files'); } catch (e) {}
       fs.writeFileSync(__dirname + '/actual_files/debug.min.js', actualCode, 'utf8');
     });
