@@ -1,14 +1,11 @@
-// Basics for testing
-var fs = require('fs'),
-    assert = require('assert'),
-    jsmin = require('../lib/jsmin.sourcemap.js'),
-    testFilesDir = __dirname + '/test_files',
-    expectedDir = __dirname + '/expected_files';
-
-// Reverse test items
-var sourcemap = require('source-map'),
+// Load in dependencies
+var assert = require('assert'),
+    fs = require('fs'),
+    sourcemap = require('source-map'),
     charProps = require('char-props'),
-    SourceMapConsumer = sourcemap.SourceMapConsumer;
+    jsmin = require('../'),
+    SourceMapConsumer = sourcemap.SourceMapConsumer,
+    testFilesDir = __dirname + '/test_files';
 
 function minifySingle() {
   before(function () {
@@ -48,7 +45,7 @@ function minifyMulti() {
 function assertMatchesC() {
   it('matches its C-minified counterpart', function () {
     var params = this.params,
-        expectedCode = fs.readFileSync(expectedDir + '/' + params.dest, 'utf8');
+        expectedCode = fs.readFileSync(__dirname + '/expected_files/' + params.dest, 'utf8');
     assert.strictEqual(
       this.result.code,
       expectedCode,
