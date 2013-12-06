@@ -107,7 +107,9 @@ function assertAllPositionsMatch() {
 
         // Assert that the actual and expected characters are equal
         var actualChar = actualCode.charAt(i);
-        assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
+        // DEV: Nuking character comparison for break location so we can find it via error message
+        // assert.strictEqual(actualChar, srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
+        assert(actualChar === srcChar, 'The sourcemapped character at index ' + i + ' does not match its original character at line ' + srcLine + ', column ' + srcCol + '.');
       }
     }
   });
@@ -239,7 +241,7 @@ describe('Multiple files containing "use strict" 2', function () {
       ],
       'dest': 'strict2.min.js'
     };
-    // this.expectedBreaks = [36];
+    this.expectedBreaks = [135];
   });
 
   describe('minified and sourcemapped (multi)', function () {
