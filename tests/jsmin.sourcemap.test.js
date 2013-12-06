@@ -229,3 +229,30 @@ describe('Multiple files containing "use strict"', function () {
     });
   });
 });
+
+describe('Multiple files containing "use strict" 2', function () {
+  before(function () {
+    this.params = {
+      'src': [
+        'strict3.js',
+        'strict4.js'
+      ],
+      'dest': 'strict2.min.js'
+    };
+    // this.expectedBreaks = [36];
+  });
+
+  describe('minified and sourcemapped (multi)', function () {
+    minifyMulti();
+    isDebuggable();
+
+    // DEV: This is not the actual C output. The C one doesn't contain line breaks which can break concatenated scripts.
+    assertMatchesC();
+
+    describe('mapped against its source', function () {
+      mapAgainstSource();
+
+      assertAllPositionsMatch();
+    });
+  });
+});
